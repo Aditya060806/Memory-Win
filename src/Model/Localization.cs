@@ -27,7 +27,7 @@ namespace MemoryWin
         private string _optimizationHotkey, _optimize, _optimizeOnMiddleMouseClick, _optimizing;
         private string _physicalMemory, _processExclusionList;
         private string _reason, _registryCache, _remove, _reset, _resetCommand, _resetConfirmation, _runOnLowPriority, _runOnStartup;
-        private string _schedule, _seconds, _settings, _showMemoryUsage, _showOptimizationNotifications, _showVirtualMemory, _standbyList, _standbyListLowPriority, _startMinimized, _systemFileCache;
+        private string _schedule, _seconds, _settings, _showMemoryUsage, _showOptimizationNotifications, _showVirtualMemory, _standbyList, _standbyListLowPriority, _startMinimized, _statistics, _systemFileCache;
         private string _text, _totalMemoryFreed, _trayIcon;
         private string _updatedToVersion, _used, _useTransparentBackground;
         private string _virtualMemory;
@@ -435,6 +435,13 @@ namespace MemoryWin
         {
             get { return _settings; }
             private set { _settings = value.Capitalize(); }
+        }
+
+        [DataMember]
+        public string Statistics
+        {
+            get { return _statistics; }
+            private set { _statistics = value.Capitalize(); }
         }
 
         [DataMember]

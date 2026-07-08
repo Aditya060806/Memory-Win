@@ -615,6 +615,36 @@
                     </GroupBox>
                 </Grid>
             </Grid>
+            <!-- Statistics -->
+            <GroupBox Header="{Binding Path=(local:Localizer.String).Statistics}"
+                      KeyboardNavigation.TabNavigation="None"
+                      Margin="10, 5, 10, 0"
+                      Visibility="{Binding CompactMode, Converter={StaticResource InverseBooleanToVisibilityConverter}, FallbackValue={x:Static Visibility.Visible}}">
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Path=(local:Localizer.String).TotalMemoryFreed}"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text=" | "
+                                   VerticalAlignment="Center" />
+                        <TextBlock FontWeight="Bold"
+                                   Foreground="{DynamicResource Accent}"
+                                   Text="{Binding StatisticsMemoryFreedText}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Margin="0, 3, 0, 0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Path=(local:Localizer.String).MemoryOptimized}"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text=" | "
+                                   VerticalAlignment="Center" />
+                        <TextBlock FontWeight="Bold"
+                                   Text="{Binding StatisticsOptimizationCount}"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
             <!-- Footer -->
             <Grid Margin="10, 0, 10, 10">
                 <Grid.ColumnDefinitions>

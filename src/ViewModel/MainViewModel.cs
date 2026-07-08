@@ -842,6 +842,26 @@ namespace MemoryWin
         }
 
         /// <summary>
+        /// Gets the lifetime number of optimizations performed.
+        /// </summary>
+        public int StatisticsOptimizationCount
+        {
+            get { return Settings.StatisticsOptimizationCount; }
+        }
+
+        /// <summary>
+        /// Gets the lifetime total physical memory reclaimed, formatted with its unit.
+        /// </summary>
+        public string StatisticsMemoryFreedText
+        {
+            get
+            {
+                var freed = Settings.StatisticsMemoryFreed.ToMemoryUnit();
+                return string.Format(Localizer.Culture, "{0:0.#} {1}", freed.Key, freed.Value);
+            }
+        }
+
+        /// <summary>
         /// Gets the processes.
         /// </summary>
         /// <value>
@@ -1810,6 +1830,9 @@ namespace MemoryWin
                     Settings.StatisticsOptimizationCount++;
                     Settings.StatisticsMemoryFreed += physicalReleasedBytes;
                     Settings.Save();
+
+                    RaisePropertyChanged(() => StatisticsOptimizationCount);
+                    RaisePropertyChanged(() => StatisticsMemoryFreedText);
 
                     // Notification
                     if (Settings.ShowOptimizationNotifications)
