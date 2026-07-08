@@ -399,3 +399,7 @@ FodyWeavers.xsd
 
 # Github pages
 docs/package-lock.json
+
+# Do NOT ignore the Model/Log source folder (the "[Ll]og/" build-log rule above matches it by accident)
+!src/Model/Log/
+!src/Model/Log/**
