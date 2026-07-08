@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://aditya060806.github.io/Memory-Win/sitemap.xml
