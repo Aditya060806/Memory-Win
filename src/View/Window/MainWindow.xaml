@@ -40,8 +40,11 @@
                             VerticalAlignment="Center">
                     <Image RenderOptions.BitmapScalingMode="Fant"
                            RenderOptions.EdgeMode="Aliased"
+                           Height="32"
                            Source="/MemoryWin;component/Resources/Images/memory-win.ico"
-                           VerticalAlignment="Center" />
+                           Stretch="Uniform"
+                           VerticalAlignment="Center"
+                           Width="32" />
                     <TextBlock FontWeight="Normal"
                                Margin="5, 0, 0, 0"
                                Text="{Binding Title}"
