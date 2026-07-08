@@ -48,6 +48,7 @@ namespace MemoryWin
                 public const string Install = "Install";
                 public const string Reset = "Reset";
                 public const string Service = "Service";
+                public const string Stats = "Stats";
                 public const string Uninstall = "Uninstall";
             }
 

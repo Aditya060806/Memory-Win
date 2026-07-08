@@ -401,6 +401,39 @@ namespace MemoryWin
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the dark theme is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the dark theme is enabled; otherwise, the light theme is used.
+        /// </value>
+        public bool DarkMode
+        {
+            get { return Settings.Theme == Enums.Theme.Dark; }
+            set
+            {
+                try
+                {
+                    IsBusy = true;
+
+                    var theme = value ? Enums.Theme.Dark : Enums.Theme.Light;
+
+                    ThemeManager.Theme = theme;
+                    Settings.Theme = theme;
+                    Settings.Save();
+
+                    if (!App.IsInDesignMode)
+                        NotificationService.Update(Computer.Memory, IsOptimizationRunning);
+
+                    RaisePropertyChanged();
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the computer.
         /// </summary>
         /// <value>
@@ -937,6 +970,7 @@ namespace MemoryWin
                        new ObservableItem<bool>(Localizer.String.CloseAfterOptimization, () => CloseAfterOptimization, value => CloseAfterOptimization = value),
                        new ObservableItem<bool>(Localizer.String.CloseToTheNotificationArea, () => CloseToTheNotificationArea, value => CloseToTheNotificationArea = value),
                        new ObservableItem<bool>(Localizer.String.CreateStartMenuShortcut, () => CreateStartMenuShortcut, value => CreateStartMenuShortcut = value),
+                       new ObservableItem<bool>(Localizer.String.DarkMode, () => DarkMode, value => DarkMode = value),
                        new ObservableItem<bool>(Localizer.String.RunOnLowPriority, () => RunOnLowPriority, value => RunOnLowPriority = value),
                        new ObservableItem<bool>(Localizer.String.RunOnStartup, () => RunOnStartup, value => RunOnStartup = value),
                        new ObservableItem<bool>(Localizer.String.ShowOptimizationNotifications, () => ShowOptimizationNotifications, value => ShowOptimizationNotifications = value),
@@ -1770,15 +1804,25 @@ namespace MemoryWin
                     Computer.Memory = _computerService.Memory;
                     RaisePropertyChanged(() => Computer);
 
+                    // Statistics - count only the physical memory that was actually reclaimed
+                    var physicalReleasedBytes = Computer.Memory.Physical.Free.Bytes > tempPhysicalAvailable ? Computer.Memory.Physical.Free.Bytes - tempPhysicalAvailable : 0;
+
+                    Settings.StatisticsOptimizationCount++;
+                    Settings.StatisticsMemoryFreed += physicalReleasedBytes;
+                    Settings.Save();
+
                     // Notification
                     if (Settings.ShowOptimizationNotifications)
                     {
-                        var physicalReleased = (Computer.Memory.Physical.Free.Bytes > tempPhysicalAvailable ? Computer.Memory.Physical.Free.Bytes - tempPhysicalAvailable : tempPhysicalAvailable - Computer.Memory.Physical.Free.Bytes).ToMemoryUnit();
+                        var physicalReleased = physicalReleasedBytes.ToMemoryUnit();
                         var virtualReleased = (Computer.Memory.Virtual.Free.Bytes > tempVirtualAvailable ? Computer.Memory.Virtual.Free.Bytes - tempVirtualAvailable : tempVirtualAvailable - Computer.Memory.Virtual.Free.Bytes).ToMemoryUnit();
+                        var totalFreed = Settings.StatisticsMemoryFreed.ToMemoryUnit();
 
                         var message = Settings.ShowVirtualMemory
                             ? string.Format(Localizer.Culture, "{1}{0}{0}{2}: {3}{0}{4}: {5:0.#} {6}{0}{7}: {8:0.#} {9}", Environment.NewLine, Localizer.String.MemoryOptimized.ToUpper(Localizer.Culture), Localizer.String.Reason, reason.GetString(), Localizer.String.PhysicalMemory, physicalReleased.Key, physicalReleased.Value, Localizer.String.VirtualMemory, virtualReleased.Key, virtualReleased.Value)
                             : string.Format(Localizer.Culture, "{1}{0}{0}{2}: {3}{0}{4}: {5:0.#} {6}", Environment.NewLine, Localizer.String.MemoryOptimized.ToUpper(Localizer.Culture), Localizer.String.Reason, reason.GetString(), Localizer.String.PhysicalMemory, physicalReleased.Key, physicalReleased.Value);
+
+                        message += string.Format(Localizer.Culture, "{0}{1}: {2:0.#} {3}", Environment.NewLine, Localizer.String.TotalMemoryFreed, totalFreed.Key, totalFreed.Value);
 
                         Notify(message);
                     }

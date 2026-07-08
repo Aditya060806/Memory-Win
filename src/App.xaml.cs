@@ -428,6 +428,9 @@ namespace MemoryWin
                         if (argument.Equals(Constants.App.CommandLineArgument.Service, StringComparison.OrdinalIgnoreCase))
                             startupType = Enums.StartupType.Service;
 
+                        if (argument.Equals(Constants.App.CommandLineArgument.Stats, StringComparison.OrdinalIgnoreCase))
+                            startupType = Enums.StartupType.Stats;
+
                         if (argument.Equals(Constants.App.CommandLineArgument.Uninstall, StringComparison.OrdinalIgnoreCase))
                             startupType = Enums.StartupType.Uninstallation;
 
@@ -469,7 +472,7 @@ namespace MemoryWin
                         Helper.StartMenuShortcut(Settings.CreateStartMenuShortcut);
 
                         // Theme
-                        ThemeManager.Theme = Enums.Theme.Dark;
+                        ThemeManager.Theme = Settings.Theme;
 
                         // Notification Areas
                         _notifyIcon = new NotifyIcon();
@@ -563,6 +566,27 @@ namespace MemoryWin
                         DependencyInjection.Container.Resolve<IComputerService>().Optimize(Enums.Memory.Optimization.Reason.Manual, memoryAreas);
 
                         Shutdown();
+                        break;
+
+                    case Enums.StartupType.Stats:
+                        try
+                        {
+                            Logger.EnableConsoleOutput();
+
+                            var totalFreed = Settings.StatisticsMemoryFreed.ToMemoryUnit();
+
+                            Logger.Information(string.Format(Localizer.Culture, "{0}: {1}", Localizer.String.MemoryOptimized, Settings.StatisticsOptimizationCount));
+                            Logger.Information(string.Format(Localizer.Culture, "{0}: {1:0.#} {2}", Localizer.String.TotalMemoryFreed, totalFreed.Key, totalFreed.Value));
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Error(ex.GetMessage());
+                        }
+                        finally
+                        {
+                            Shutdown(true);
+                        }
+
                         break;
 
                     case Enums.StartupType.Uninstallation:

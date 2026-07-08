@@ -64,6 +64,12 @@ namespace MemoryWin
 
         public static bool StartMinimized { get; set; }
 
+        public static long StatisticsMemoryFreed { get; set; }
+
+        public static int StatisticsOptimizationCount { get; set; }
+
+        public static Enums.Theme Theme { get; set; }
+
         public static Brush TrayIconBackgroundColor { get; set; }
 
         public static Brush TrayIconDangerColor { get; set; }
@@ -112,6 +118,9 @@ namespace MemoryWin
             ShowOptimizationNotifications = true;
             ShowVirtualMemory = false;
             StartMinimized = false;
+            StatisticsMemoryFreed = 0L;
+            StatisticsOptimizationCount = 0;
+            Theme = Enums.Theme.Dark;
             TrayIconBackgroundColor = Brushes.DarkGreen;
             TrayIconDangerColor = Brushes.DarkRed;
             TrayIconDangerLevel = 90;
@@ -185,6 +194,14 @@ namespace MemoryWin
                         ShowOptimizationNotifications = Convert.ToBoolean(key.GetValue(Helper.NameOf(() => ShowOptimizationNotifications), ShowOptimizationNotifications), _culture);
                         ShowVirtualMemory = Convert.ToBoolean(key.GetValue(Helper.NameOf(() => ShowVirtualMemory), ShowVirtualMemory), _culture);
                         StartMinimized = Convert.ToBoolean(key.GetValue(Helper.NameOf(() => StartMinimized), StartMinimized), _culture);
+                        StatisticsMemoryFreed = Convert.ToInt64(key.GetValue(Helper.NameOf(() => StatisticsMemoryFreed), StatisticsMemoryFreed), _culture);
+                        StatisticsOptimizationCount = Convert.ToInt32(key.GetValue(Helper.NameOf(() => StatisticsOptimizationCount), StatisticsOptimizationCount), _culture);
+
+                        Enums.Theme theme;
+
+                        if (Enum.TryParse(Convert.ToString(key.GetValue(Helper.NameOf(() => Theme), Theme), _culture), out theme) && Enum.IsDefined(typeof(Enums.Theme), theme))
+                            Theme = theme;
+
                         TrayIconBackgroundColor = Convert.ToString(key.GetValue(Helper.NameOf(() => TrayIconBackgroundColor), TrayIconBackgroundColor), _culture).ToBrush(TrayIconBackgroundColor);
                         TrayIconDangerColor = Convert.ToString(key.GetValue(Helper.NameOf(() => TrayIconDangerColor), TrayIconDangerColor), _culture).ToBrush(TrayIconDangerColor);
                         TrayIconDangerLevel = Convert.ToByte(key.GetValue(Helper.NameOf(() => TrayIconDangerLevel), TrayIconDangerLevel), _culture);
@@ -278,6 +295,9 @@ namespace MemoryWin
                         key.SetValue(Helper.NameOf(() => ShowOptimizationNotifications), ShowOptimizationNotifications ? 1 : 0);
                         key.SetValue(Helper.NameOf(() => ShowVirtualMemory), ShowVirtualMemory ? 1 : 0);
                         key.SetValue(Helper.NameOf(() => StartMinimized), StartMinimized ? 1 : 0);
+                        key.SetValue(Helper.NameOf(() => StatisticsMemoryFreed), StatisticsMemoryFreed.ToString(_culture));
+                        key.SetValue(Helper.NameOf(() => StatisticsOptimizationCount), StatisticsOptimizationCount);
+                        key.SetValue(Helper.NameOf(() => Theme), (int)Theme);
                         key.SetValue(Helper.NameOf(() => TrayIconBackgroundColor), TrayIconBackgroundColor.GetHex(true));
                         key.SetValue(Helper.NameOf(() => TrayIconDangerColor), TrayIconDangerColor.GetHex(true));
                         key.SetValue(Helper.NameOf(() => TrayIconDangerLevel), TrayIconDangerLevel);

@@ -97,6 +97,7 @@ namespace MemoryWin
             Reset,
             Service,
             Silent,
+            Stats,
             Uninstallation
         }
 

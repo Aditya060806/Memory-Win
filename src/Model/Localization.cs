@@ -15,7 +15,7 @@ namespace MemoryWin
         private string _about, _add, _alwaysOnTop, _autoOptimization, _autoOptimizationInterval, _autoUpdate;
         private string _background;
         private string _close, _closeAfterOptimization, _closeToTheNotificationArea, _collapse, _combinedPageList, _createStartMenuShortcut;
-        private string _dangerLevel, _donate, _donationMessage, _donationTitle;
+        private string _dangerLevel, _darkMode, _donate, _donationMessage, _donationTitle;
         private string _error, _errorAdminPrivilegeRequired, _errorCanNotSaveLog, _errorMemoryAreaOptimizationNotSupported, _errorResetCommand, _everyHour, _exit, _expand;
         private string _free;
         private string _garbageCollector;
@@ -28,7 +28,7 @@ namespace MemoryWin
         private string _physicalMemory, _processExclusionList;
         private string _reason, _registryCache, _remove, _reset, _resetCommand, _resetConfirmation, _runOnLowPriority, _runOnStartup;
         private string _schedule, _seconds, _settings, _showMemoryUsage, _showOptimizationNotifications, _showVirtualMemory, _standbyList, _standbyListLowPriority, _startMinimized, _systemFileCache;
-        private string _text, _trayIcon;
+        private string _text, _totalMemoryFreed, _trayIcon;
         private string _updatedToVersion, _used, _useTransparentBackground;
         private string _virtualMemory;
         private string _warningLevel, _whenFreePhysicalMemoryIsBelow, _workingSet;
@@ -134,6 +134,13 @@ namespace MemoryWin
         {
             get { return _dangerLevel; }
             private set { _dangerLevel = value.Capitalize(); }
+        }
+
+        [DataMember]
+        public string DarkMode
+        {
+            get { return _darkMode; }
+            private set { _darkMode = value.Capitalize(); }
         }
 
         [DataMember]
@@ -484,6 +491,13 @@ namespace MemoryWin
         {
             get { return _text; }
             private set { _text = value.Capitalize(); }
+        }
+
+        [DataMember]
+        public string TotalMemoryFreed
+        {
+            get { return _totalMemoryFreed; }
+            private set { _totalMemoryFreed = value.Capitalize(); }
         }
 
         [DataMember]
